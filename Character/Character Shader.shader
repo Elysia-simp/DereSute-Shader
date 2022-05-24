@@ -1,7 +1,7 @@
 Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 {
 	Properties
-	{
+	{	//anything commented out is something i simply do not understand
 		[MaterialToggle] _UseFaceTex ("UseFaceTex", Float) = 0
 		[KeywordEnum(Original, Accessory, Head, Object, Body)] _TexturePack ("TexturePack", Float) = 0
 		[Space(5)] _MainTex ("Diffuse Texture", 2D) = "white" { }
@@ -10,7 +10,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 		_RimPower ("_RimPower", Range(1, 16)) = 4
 		_RimRate ("_RimRate", Range(0, 2)) = 0.5
 		_RimColor ("_RimColor", Color) = (1,1,1,1)
-		_RimShadow ("_RimShadow", Range(0, 2)) = 0
+//		_RimShadow ("_RimShadow", Range(0, 2)) = 0
 		_SpecTex ("_SpecTex", 2D) = "white" { }
 		[Toggle(DISABLE_SPECULAR)] _bSpecular ("Disable Specular", Float) = 0
 		_SpecPower ("_SpecPower", Range(1, 200)) = 32
@@ -22,8 +22,8 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 		_outlineParam ("Outline Param : x=Width y=Brightness", Vector) = (1,0.5,0,0)
 		_outlineZOffset ("Outline Z Offset", Float) = 0.0015
 		_RimColorMulti ("_RimColorMulti", Color) = (1,1,1,1)
-		_HeightLightParam ("_HeightLightParam", Vector) = (0,1,0,0)
-		_HeightLightColor ("_HeightLightColor", Color) = (0,0,0,0)
+//		_HeightLightParam ("_HeightLightParam", Vector) = (0,1,0,0)
+//		_HeightLightColor ("_HeightLightColor", Color) = (0,0,0,0)
 		_StencilValue ("_StencilValue", Float) = 127
 	}
 	SubShader
