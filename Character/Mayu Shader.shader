@@ -1,12 +1,12 @@
 Shader "Cygames/3DLive/Chara/CharaMayuRich"
 {
     Properties
-    {
+    {   //anything commented out is something i simply do not understand
         _MainTex ("Diffuse Texture", 2D) = "white" { }
         _OutlineTex ("Outline Texture", 2D) = "red" { }
         _outlineParam ("Outline Param : x=Width y=Brightness", Vector) = (1,0.5,0,0)
-        _HeightLightParam ("_HeightLightParam", Vector) = (0,1,0,0)
-        _HeightLightColor ("_HeightLightColor", Color) = (0,0,0,0)
+//        _HeightLightParam ("_HeightLightParam", Vector) = (0,1,0,0)
+//        _HeightLightColor ("_HeightLightColor", Color) = (0,0,0,0)
     }
     SubShader
     {
