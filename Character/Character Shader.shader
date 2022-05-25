@@ -2,8 +2,8 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 {
 	Properties
 	{	//anything commented out is something i simply do not understand
-		[MaterialToggle] _UseFaceTex ("UseFaceTex", Float) = 0
-		[KeywordEnum(Original, Accessory, Head, Object, Body)] _TexturePack ("TexturePack", Float) = 0
+//		[MaterialToggle] _UseFaceTex ("UseFaceTex", Float) = 0
+//		[KeywordEnum(Original, Accessory, Head, Object, Body)] _TexturePack ("TexturePack", Float) = 0
 		[Space(5)] _MainTex ("Diffuse Texture", 2D) = "white" { }
 		_ControlMap ("_ControlMap", 2D) = "white" { }
 		_RimNormalAdjust ("_RimNormalAdjust", Range(-2, 2)) = 0
@@ -52,7 +52,6 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			struct appdata
 		{
 			float4 vertex : POSITION;
-			half3 normal : NORMAL;
 			float4 color : COLOR;
 			float2 uv : TEXCOORD0;
 			float4 tangent : TANGENT;
@@ -63,6 +62,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			UNITY_FOG_COORDS(1)
 			float4 color : COLOR;
 			half3 normal : NORMAL;
+			float4 tangent : TANGENT;
 			float4 vertex : SV_POSITION;
 			float4 posWorld : TEXCOORD1;
 		};
@@ -82,6 +82,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 		float _RimRate;
 		float _EnvRate;
 		float _EnvBias;
+		float _RimNormalAdjust;
 
 
 		v2f vert (appdata v)
@@ -102,11 +103,11 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			fixed4 col = tex2D(_MainTex, i.uv);
 			//multi
 			fixed4 multi = tex2D(_ControlMap, i.uv);
-
+			multi.b *= _RimColorMulti;
 			// apply fog
 			UNITY_APPLY_FOG(i.fogCoord, col);
 			//spec
-			float3 normalDir = i.normal;
+			float3 normalDir = i.normal += _RimNormalAdjust;
 			float3 viewDir = normalize( _WorldSpaceCameraPos.xyz - i.posWorld.xyz);
 			float ndoth = saturate(pow(dot(normalDir, normalize(viewDir)), _SpecPower)) * _SpecRate;
 
@@ -123,12 +124,12 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			float rimUV = saturate(pow(1.0 - dot(viewDir, normalDir), _RimPower) * _RimRate);
 
 			//env
-			float ENV = 0.5 + dot(normalDir * _EnvBias, viewDir * i.uv) * _EnvRate ;
+			float ENV = dot(normalDir * _EnvBias, viewDir * i.uv) * _EnvRate ;
 
 
 
 			//lerp stuff
-			col.rgb = lerp(col.rgb, col.rgb + rimUV, multi.b * _RimColor * _RimColorMulti);
+			col.rgb = lerp(col.rgb, col.rgb + rimUV, multi.b * _RimColor);
 			col.rgb = lerp(col.rgb, col.rgb + spec, multi.r);
 			col.rgb = lerp(col.rgb, col.rgb + ENV, multi.g);
 			col.rgb *= unity_LightColor[0].rgb;
@@ -159,7 +160,6 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				half3 normal : NORMAL;
 				float4 color : COLOR;
 				float2 uv : TEXCOORD0;
 				float4 tangent : TANGENT;
@@ -183,7 +183,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 				o.uv = v.uv;
 				o.color = v.color;
 				//once again adjusted for asset ripper models and models scaled by 100
-				v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color.r * v.color.g * v.color.b *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.5) ;
+				v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.7) ;
 				o.position = UnityObjectToClipPos(v.vertex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				return o;
