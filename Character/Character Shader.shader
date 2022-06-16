@@ -2,6 +2,12 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 {
 	Properties
 	{	//anything commented out is something i simply do not understand
+		[Header(Custom)]
+		[Enum(Static, 0, Dynamic, 1, None, 2)] _OutlineType ("Outline Scale type", Float) = 0
+		[Space(10)]
+		[Header(Original Shader Stuff)]
+
+
 //		[MaterialToggle] _UseFaceTex ("UseFaceTex", Float) = 0
 //		[KeywordEnum(Original, Accessory, Head, Object, Body)] _TexturePack ("TexturePack", Float) = 0
 		[Space(5)] _MainTex ("Diffuse Texture", 2D) = "white" { }
@@ -176,6 +182,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			float4 _MainTex_ST;
 			float _outlineZOffset;
 			float2 _outlineParam;
+			float _OutlineType;
 
 			v2f vert (appdata v)
 			{
@@ -183,7 +190,12 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 				o.uv = v.uv;
 				o.color = v.color;
 				//once again adjusted for asset ripper models and models scaled by 100
+				if(_OutlineType == 1){
 				v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.7) ;
+				}
+				if(_OutlineType == 0){
+					v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x);
+				}
 				o.position = UnityObjectToClipPos(v.vertex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				return o;
