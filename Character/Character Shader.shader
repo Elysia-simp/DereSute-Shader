@@ -130,7 +130,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			float rimUV = saturate(pow(1.0 - dot(viewDir, normalDir), _RimPower) * _RimRate);
 
 			//env
-			float ENV = pow(dot(normalDir, viewDir), _EnvPower) * _EnvRate;
+			float ENV = pow(dot(normalDir, viewDir), _EnvBias) * _EnvRate ;
 
 
 
