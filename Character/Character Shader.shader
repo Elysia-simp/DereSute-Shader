@@ -168,7 +168,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 				float4 vertex : POSITION;
 				float4 color : COLOR;
 				float2 uv : TEXCOORD0;
-				float4 tangent : TANGENT;
+				float3 normal : NORMAL;
             };
 
 			struct v2f
@@ -194,7 +194,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 				v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.7) ;
 				}
 				if(_OutlineType == 0){
-					v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x);
+					v.vertex.xyz += v.normal.xyz * _outlineZOffset * (v.color *  _outlineParam.x);
 				}
 				o.position = UnityObjectToClipPos(v.vertex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
