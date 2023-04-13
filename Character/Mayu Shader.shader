@@ -78,7 +78,7 @@ Shader "Cygames/3DLive/Chara/CharaMayuRich"
             Comp notequal
             Pass keep
             }
-			Cull Front
+		    Cull Back
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
