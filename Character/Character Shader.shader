@@ -130,15 +130,16 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 			float rimUV = saturate(pow(1.0 - dot(viewDir, normalDir), _RimPower) * _RimRate);
 
 			//env
-			float ENV = pow(dot(normalDir, viewDir), _EnvBias) * _EnvRate ;
+			float ENV = saturate(pow(dot(normalDir, viewDir), _EnvBias) * _EnvRate) ;
 
 
 
 			//lerp stuff
-			col.rgb = lerp(col.rgb, col.rgb + rimUV, multi.b * _RimColor);
+			col.rgb = lerp(col.rgb, col.rgb + rimUV, saturate(multi.b * _RimColor));
 			col.rgb = lerp(col.rgb, col.rgb + spec, multi.r);
 			col.rgb = lerp(col.rgb, col.rgb + ENV, multi.g);
 			col.rgb *= unity_LightColor[0].rgb;
+			col = saturate(col);
 			return col;
 		}
 		ENDCG
@@ -191,7 +192,7 @@ Shader "Cygames/3DLive/Chara/CharaDefaultRich"
 				o.color = v.color;
 				//once again adjusted for asset ripper models and models scaled by 100
 				if(_OutlineType == 1){
-				v.vertex.xyz += v.tangent.xyz * _outlineZOffset * (v.color *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.7) ;
+				v.vertex.xyz += v.normal.xyz * _outlineZOffset * (v.color *  _outlineParam.x) * (length(ObjSpaceViewDir(v.vertex)) * 1.7) ;
 				}
 				if(_OutlineType == 0){
 					v.vertex.xyz += v.normal.xyz * _outlineZOffset * (v.color *  _outlineParam.x);
